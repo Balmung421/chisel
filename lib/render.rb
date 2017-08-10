@@ -1,5 +1,5 @@
-require_relative 'paragraph'
 require_relative 'header'
+require_relative 'paragraph'
 
 class Render
 
