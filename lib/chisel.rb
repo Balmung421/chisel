@@ -4,6 +4,7 @@ require_relative 'emphasizer'
 require_relative 'lister'
 require_relative 'linker'
 require_relative 'imager'
+require_relative 'style'
 require 'pry'
 
 class Chisel
@@ -20,6 +21,7 @@ class Chisel
 
   def parse
     parsed_document = []
+    parsed_document << Style.new.style_inserter("img {width: 100%; height: auto;}")
     split_text.each do |string|
       unless string.start_with?("*", "#", "[", "!") || string[0].to_i > 0
         parsed_document << Paragrapher.new.paragraph_replacer(string)
