@@ -17,6 +17,6 @@ My favorite cuisines are:
 2. Barbeque
 3. Mexican
 
-[This link is a video you must watch](https://www.youtube.com/watch?v=csYjk5m4_PY)
+[This link](http://example.net/)
 
-![Starcadian](interspace-starcadian.jpg)
+![Memes](life.jpg)

@@ -1,25 +1,44 @@
-require_relative 'render'
+require_relative 'header'
+require_relative 'paragrapher'
+require_relative 'emphasizer'
+require_relative 'lister'
+require_relative 'linker'
+require_relative 'imager'
+require_relative 'style'
+require 'pry'
 
 class Chisel
+  attr_reader :markdown_file, :html_file
 
-  attr_reader :input, :output, :renderer
-
-  def initialize(input, output)
-    @input = input.read
-    @output = output
-    @renderer = Render.new(@input)
+  def initialize(markdown_file, html_file =nil)
+    @markdown_file = markdown_file
+    @html_file = html_file
   end
 
-  def call
-    output.write(renderer.call)
+  def split_text
+    markdown_file.chomp("\n").split("\n\n")
   end
-end
 
-if __FILE__ == $0
-  to_be_converted = File.open(ARGV[0], "r")
-  converted_text = File.open(ARGV[1], "w")
-
-  chisel = Chisel.new(to_be_converted, converted_text)
-  chisel.call
-  puts "Converted the markdown in #{ARGV[0]} to html in #{ARGV[1]}."
+  def parse
+    parsed_document = []
+    parsed_document << Style.new.style_inserter("img {width: 100%; height: auto;}")
+    split_text.each do |string|
+      unless string.start_with?("*", "#", "[", "!") || string[0].to_i > 0
+        parsed_document << Paragrapher.new.paragraph_replacer(string)
+      end
+      if string.start_with?("#")
+        parsed_document << Header.new.header_replacer(string)
+      elsif string.start_with?("*")
+        parsed_document << Lister.new.ul_replacer(string)
+      elsif string[0].to_i > 0
+        parsed_document << Lister.new.ol_replacer(string)
+      elsif string.start_with?("[")
+        parsed_document << Linker.new.link_replacer(string)
+      elsif string.start_with?("!")
+        parsed_document << Imager.new.image_replacer(string)
+      end
+    end
+    parsed = parsed_document.join("\n")
+    Emphasizer.new(parsed).emphasize
+  end
 end
