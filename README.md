@@ -5,7 +5,8 @@ By running
 ```ruby
 ruby runner.rb input.md output.html
 ```
-in your terminal (after cd'ing into the chisel/ project root directory), you will have succesfully converted markdown into HTML. 
+in your terminal (after cd'ing into the chisel/ project root directory), you will have succesfully converted markdown into HTML.
+
 ---
 layout: page
 title: Chisel
